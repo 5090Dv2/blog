@@ -2,24 +2,24 @@
 export const CONFIG = {
   // GitHub Repository
   github: {
-    owner: 'your-username',
-    repo: 'your-blog-repo',
+    owner: '5090Dv2',
+    repo: 'blog',
     branch: 'main',
     postsDir: 'posts',
   },
 
   // Blog Info
   blog: {
-    title: '张三的技术博客',
+    title: '5090Dv2 的博客',
     subtitle: '分享代码与思考',
-    description: '一个专注于前端开发、技术分享的个人博客',
-    author: '张三',
+    description: '5090Dv2的技术博客',
+    author: '5090Dv2',
   },
 
   // Social Links
   social: {
-    github: 'https://github.com/your-username',
-    email: 'your-email@example.com',
+    github: 'https://github.com/5090Dv2',
+    email: 'https://cnboxing.net',
     twitter: '',
     juejin: '',
     zhihu: '',

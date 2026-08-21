@@ -1,127 +1,56 @@
 ---
-title: 从零搭建现代化个人博客
+title: 我的 Minecraft 服务器开发笔记
 date: 2024-12-15
-author: 张三
-category: 教程
-tags: 博客,教程,前端,GitHub
-excerpt: 本教程将带你从零开始搭建一个基于 GitHub 的现代化个人博客，采用模块化架构设计。
+author: 5090Dv2
+category: Minecraft
+tags: Minecraft,Java,插件开发,Spigot
+excerpt: 作为一个简单的 Minecraft 玩家，记录一下在服务器开发中踩过的坑和学到的东西。
 ---
 
-# 从零搭建现代化个人博客
+# 我的 Minecraft 服务器开发笔记
 
-想要拥有一个属于自己的现代化博客？本教程将带你从零开始搭建一个基于 GitHub 的个人博客。
+玩 Minecraft 这么久，从最早只是个玩家，到后来开始折腾服务器插件，一路走来学了不少东西。这篇文章算是一个起点，记录一下我的开发经历。
 
-## 为什么选择这个方案？
+## 我的项目
 
-- **现代化设计**：采用最新的 UI 设计理念
-- **模块化架构**：代码结构清晰，易于维护
-- **完全免费**：无需购买服务器
-- **响应式**：完美适配各种设备
+### CNBoxing
+一个 Minecraft 拳击/格斗插件，支持多人对战。用了 Spigot API，主要处理玩家交互、伤害计算和胜负判定。
 
-## 架构设计
+### CNE9 系列
+这是我在 CNE9 服务器上开发的一系列插件：
+- **CNE9-AntiCheat** - 反作弊系统
+- **CNE9-Bot** - 机器人系统
+- **CNE9-KnockBack** - 击退管理
+- **CNE9-NPC** - NPC 系统
+- **CNE9-Permissions** - 权限管理
+- **CNE9-Prank** - 恶作剧插件
+- **CNE9-Rank** - 等级系统
+- **CNE9-WebPanel** - Web 管理面板
+- **CNE9-WorldManager** - 世界管理
 
-```
-github-blog/
-├── src/
-│   ├── js/           # JavaScript 模块
-│   │   ├── app.js    # 主入口
-│   │   ├── config.js # 配置
-│   │   ├── api.js    # API 请求
-│   │   ├── utils.js  # 工具函数
-│   │   ├── theme.js  # 主题管理
-│   │   ├── navigation.js # 导航
-│   │   ├── renderer.js # 渲染器
-│   │   └── search.js # 搜索
-│   └── styles/       # CSS 样式
-│       ├── variables.css
-│       ├── base.css
-│       ├── components.css
-│       ├── layout.css
-│       ├── pages.css
-│       ├── markdown.css
-│       ├── animations.css
-│       └── responsive.css
-└── posts/            # 文章目录
-```
+## 技术栈
 
-## 核心功能
+- **Java** - Minecraft 插件的主要语言
+- **Spigot/Paper API** - 服务器插件开发框架
+- **BungeeCord** - 跨服务器通信
+- **MySQL/SQLite** - 数据存储
+- **Web** - 管理面板开发
 
-### 1. 模块化设计
+## 开发中的一些经验
 
-每个功能都是独立的模块：
+### 事件监听
+Spigot 的事件系统很直观，但要注意性能。别在高频事件（如 `PlayerMoveEvent`）里做太重的操作。
 
-```javascript
-// config.js - 配置管理
-export const CONFIG = {
-  github: {
-    owner: 'your-username',
-    repo: 'your-blog-repo',
-  },
-};
-```
+### 异步处理
+数据库操作和网络请求一定要异步，不然会卡主线程导致 TPS 下降。
 
-### 2. 主题切换
+### 玩家数据持久化
+做好数据备份和存储，服务器重启不丢数据是基本要求。
 
-支持深色/浅色主题：
+## 未来计划
 
-```javascript
-// theme.js
-export function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  setTheme(next);
-}
-```
+继续完善 CNE9 系列插件，可能会做一些更有趣的玩法插件。Minecraft 的可能性是无限的。
 
-### 3. 搜索功能
-
-支持全文搜索：
-
-```javascript
-// search.js
-export function searchPosts(query) {
-  return parsedPosts.filter(p =>
-    p.title.toLowerCase().includes(query) ||
-    p.tags.some(t => t.toLowerCase().includes(query))
-  );
-}
-```
-
-## 快速开始
-
-```bash
-# 安装依赖
-npm install
-
-# 启动开发服务器
-npm run dev
-
-# 构建生产版本
-npm run build
-```
-
-## 发布文章
-
-在 `posts` 目录下创建 Markdown 文件：
-
-```markdown
----
-title: 文章标题
-date: 2024-01-01
-category: 技术
-tags: JavaScript, 前端
 ---
 
-这里是文章内容...
-```
-
-## 总结
-
-这个博客系统具有：
-- 现代化的 UI 设计
-- 模块化的代码架构
-- 完整的功能（搜索、分类、标签）
-- 响应式设计
-- 主题切换
-
-开始你的博客之旅吧！
+*这是一个简单的 Minecraft 玩家的开发笔记，持续更新中。*

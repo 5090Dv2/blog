@@ -1,212 +1,98 @@
-# GitHub 博客
+# 博客 · 由 GitHub 驱动
 
-一个基于 GitHub 的现代化个人博客，通过上传 Markdown 文件到 GitHub 仓库来发布文章。
-
-![博客预览](https://via.placeholder.com/800x400.png?text=Blog+Preview)
+一个基于 GitHub 的现代化个人博客，参考 Medium 阅读风设计。把 Markdown 文件推送到仓库即可发布文章，并通过 **GitHub Pages** 自动部署上线。
 
 ## ✨ 功能特点
 
-- 🎨 现代化 UI 设计，支持深色/浅色主题
-- 📱 完全响应式，支持移动端
-- 🏷️ 支持文章标签和分类
-- 📖 自动计算阅读时间
-- 🎭 支持 Frontmatter 元数据
-- ⚡ 基于 Vite，开发体验优秀
-- 🚀 部署到 GitHub Pages，完全免费
-
-## 🚀 快速开始
-
-### 1. 克隆项目
-
-```bash
-git clone https://github.com/your-username/github-blog.git
-cd github-blog
-```
-
-### 2. 安装依赖
-
-```bash
-npm install
-```
-
-### 3. 配置博客
-
-编辑 `src/main.js` 中的 `CONFIG` 对象：
-
-```javascript
-const CONFIG = {
-  owner: 'your-username',        // 你的 GitHub 用户名
-  repo: 'your-blog-repo',       // 仓库名
-  branch: 'main',               // 分支名
-  postsDir: 'posts',            // 文章存放目录
-};
-```
-
-### 4. 启动开发服务器
-
-```bash
-npm run dev
-```
-
-### 5. 构建生产版本
-
-```bash
-npm run build
-```
-
-## 📝 发布文章
-
-### 1. 创建文章
-
-在 GitHub 仓库的 `posts` 目录下创建 `.md` 文件：
-
-```markdown
----
-title: 文章标题
-date: 2024-01-01
-author: 作者名
-tags: 标签1,标签2
-excerpt: 文章摘要（可选）
----
-
-# 文章标题
-
-这里是文章内容...
-```
-
-### 2. 推送到 GitHub
-
-```bash
-git add .
-git commit -m "添加新文章"
-git push origin main
-```
-
-### 3. 查看文章
-
-刷新博客页面，新文章会自动显示。
-
-## 🎨 自定义配置
-
-### 修改博客信息
-
-编辑 `index.html` 中的标题和描述：
-
-```html
-<title>你的博客标题</title>
-<meta name="description" content="你的博客描述">
-```
-
-### 修改主题色
-
-编辑 `src/style.css` 中的 CSS 变量：
-
-```css
-:root {
-  --color-primary: #2563eb;  /* 主题色 */
-  /* ... */
-}
-```
-
-### 添加新页面
-
-1. 在 `index.html` 中添加页面 HTML
-2. 在 `src/main.js` 中添加页面切换逻辑
-3. 在 `src/style.css` 中添加页面样式
+- ✍️ Medium 风阅读体验：衬线标题、舒适阅读宽度、克制配色
+- 🌙 深色 / 浅色主题切换
+- 🔍 全文搜索（Ctrl+K）
+- 🏷️ 标签云 / 分类 / 归档
+- 📖 自动阅读时长、阅读进度条
+- 📱 完全响应式
+- 🚀 GitHub Actions 自动构建并部署到 GitHub Pages
 
 ## 📁 项目结构
 
 ```
 github-blog/
-├── index.html              # 主页面
-├── package.json            # 项目配置
-├── vite.config.js          # Vite 配置
-├── posts/                  # 文章目录
+├── index.html                  # 主页面
+├── package.json
+├── vite.config.js
+├── .github/workflows/
+│   └── deploy.yml              # GitHub Pages 自动部署
+├── posts/                      # 文章目录（Markdown）
 │   ├── hello-world.md
 │   └── javascript-async.md
 └── src/
-    ├── main.js             # 主逻辑
-    ├── style.css           # 样式文件
-    └── config.js           # 配置文件
+    ├── js/                     # 模块化逻辑
+    │   ├── app.js              # 入口
+    │   ├── config.js           # 仓库配置
+    │   ├── api.js              # GitHub API
+    │   ├── utils.js
+    │   ├── theme.js
+    │   ├── navigation.js
+    │   ├── renderer.js
+    │   └── search.js
+    └── styles/                 # 样式（变量/基础/组件/布局/页面/Markdown/动画/响应式）
 ```
 
-## 🚢 部署到 GitHub Pages
+## ⚙️ 配置（必做）
 
-### 方法一：使用 GitHub Actions
+编辑 `src/js/config.js`，填入你的仓库信息：
 
-1. 在项目根目录创建 `.github/workflows/deploy.yml`：
-
-```yaml
-name: Deploy to GitHub Pages
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Build
-        run: npm run build
-      
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+```javascript
+export const CONFIG = {
+  github: {
+    owner: '5090Dv2',           // 你的 GitHub 用户名
+    repo: 'blog',               // 仓库名
+    branch: 'main',             // 文章所在分支
+    postsDir: 'posts',          // 文章目录
+  },
+};
 ```
 
-2. 推送代码，GitHub Actions 会自动部署
+> 文章通过浏览器端 GitHub API 拉取，因此**仓库需为公开仓库**。
 
-### 方法二：手动部署
+## 📝 发布文章
+
+在仓库的 `posts/` 目录添加 `.md` 文件（支持 Frontmatter）：
+
+```markdown
+---
+title: 文章标题
+date: 2024-01-01
+category: 技术
+tags: JavaScript,前端
+excerpt: 文章摘要（可选）
+---
+
+# 正文从这里开始
+```
+
+推送到 `main` 分支后，GitHub Pages 会自动重新构建部署，刷新页面即可看到新文章。
+
+## 🚢 部署到 GitHub Pages（已配置好）
+
+仓库已包含 `.github/workflows/deploy.yml`，实现：push 到 `main` → 自动 `npm ci && npm run build` → 部署 `dist/` 到 GitHub Pages。
+
+启用步骤（一次性）：
+
+1. 推送代码到 GitHub（`git push -u origin main`）。
+2. 打开仓库 **Settings → Pages → Build and deployment → Source**，选择 **GitHub Actions**。
+3. 等待 Actions 跑完，访问 `https://5090Dv2.github.io/blog/`。
+
+之后每次 push 都会自动更新站点，无需手动操作。
+
+## 🔧 本地开发
 
 ```bash
-npm run build
-cd dist
-git init
-git add .
-git commit -m "Deploy"
-git push -f git@github.com:your-username/your-repo.git main:gh-pages
+npm install
+npm run dev        # 本地预览
+npm run build      # 构建到 dist/
+npm run preview    # 预览构建产物
 ```
-
-## 🔧 开发
-
-### 本地开发
-
-```bash
-npm run dev
-```
-
-### 代码检查
-
-```bash
-npm run lint
-```
-
-### 构建
-
-```bash
-npm run build
-```
-
-## 📚 相关资源
-
-- [GitHub API 文档](https://docs.github.com/en/rest)
-- [Markdown 语法](https://www.markdownguide.org/)
-- [Vite 文档](https://vitejs.dev/)
 
 ## 📄 License
 
-MIT © [Your Name]
+MIT

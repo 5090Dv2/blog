@@ -1,167 +1,99 @@
 ---
-title: JavaScript 异步编程深度指南
+title: Spigot 插件开发入门
 date: 2024-12-10
-author: 张三
-category: 技术
-tags: JavaScript,异步编程,Promise
-excerpt: 深入理解 JavaScript 异步编程，从回调函数到 Promise，再到 async/await 的完整指南。
+author: 5090Dv2
+category: Minecraft
+tags: Minecraft,Java,Spigot,教程
+excerpt: 从零开始学习 Minecraft Spigot 插件开发，包含环境搭建、基础概念和第一个插件。
 ---
 
-# JavaScript 异步编程深度指南
+# Spigot 插件开发入门
 
-异步编程是 JavaScript 中最重要的概念之一。本文将带你深入理解异步编程的核心原理。
+想给自己的 Minecraft 服务器加点功能？写插件是最直接的方式。这篇文章带你从零开始。
 
-## 为什么需要异步？
+## 环境准备
 
-JavaScript 是单线程语言，所有操作都是同步执行的。如果一个操作需要很长时间，整个页面就会被阻塞。
+### 1. 安装 JDK
+Minecraft 1.17+ 需要 JDK 16 或更高版本。推荐用 JDK 17。
 
-```javascript
-// 这会导致页面卡顿
-const data = fetchData(); // 需要 3 秒
-console.log(data);
+### 2. 下载 Spigot/Paper
+- **Spigot**: https://www.spigotmc.org/
+- **Paper**: https://papermc.io/ （推荐，性能更好）
+
+### 3. IDE
+用 IntelliJ IDEA，社区版免费够用。
+
+## 你的第一个插件
+
+### plugin.yml
+每个插件都需要一个 `plugin.yml` 描述信息：
+
+```yaml
+name: MyFirstPlugin
+version: 1.0
+main: com.example.MyPlugin
+api-version: '1.20'
 ```
 
-## 回调函数
-
-最原始的异步解决方案：
-
-```javascript
-function fetchData(callback) {
-  setTimeout(() => {
-    callback(null, { name: '张三' });
-  }, 1000);
-}
-
-fetchData((err, data) => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  console.log(data);
-});
-```
-
-### 回调地狱问题
-
-```javascript
-getData(function(a) {
-  getMoreData(a, function(b) {
-    getEvenMoreData(b, function(c) {
-      console.log(c);
-    });
-  });
-});
-```
-
-## Promise
-
-Promise 是对回调函数的改进：
-
-```javascript
-function fetchData() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({ name: '张三' });
-    }, 1000);
-  });
-}
-
-fetchData()
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
-```
-
-### Promise 链式调用
-
-```javascript
-getData()
-  .then(a => getMoreData(a))
-  .then(b => getEvenMoreData(b))
-  .then(c => console.log(c))
-  .catch(err => console.error(err));
-```
-
-### Promise 方法
-
-```javascript
-// Promise.all - 所有都成功才成功
-Promise.all([promise1, promise2, promise3]);
-
-// Promise.race - 第一个完成的
-Promise.race([promise1, promise2, promise3]);
-
-// Promise.allSettled - 等所有都完成
-Promise.allSettled([promise1, promise2, promise3]);
-```
-
-## async/await
-
-async/await 是 Promise 的语法糖：
-
-```javascript
-async function getData() {
-  try {
-    const a = await getData();
-    const b = await getMoreData(a);
-    const c = await getEvenMoreData(b);
-    console.log(c);
-  } catch (err) {
-    console.error(err);
-  }
-}
-```
-
-### 并发执行
-
-```javascript
-async function getData() {
-  const [users, posts, comments] = await Promise.all([
-    fetchUsers(),
-    fetchPosts(),
-    fetchComments()
-  ]);
-  
-  return { users, posts, comments };
-}
-```
-
-## 实际应用
-
-### 重试机制
-
-```javascript
-async function fetchWithRetry(url, retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      const response = await fetch(url);
-      return await response.json();
-    } catch (error) {
-      if (i === retries - 1) throw error;
-      await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+### 主类
+```java
+public class MyPlugin extends JavaPlugin {
+    @Override
+    public void onEnable() {
+        getLogger().info("插件已启用！");
     }
-  }
+    
+    @Override
+    public void onDisable() {
+        getLogger().info("插件已禁用！");
+    }
 }
 ```
 
-### 超时控制
-
-```javascript
-function timeout(promise, ms) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Timeout')), ms)
-    )
-  ]);
+### 监听事件
+```java
+public class PlayerListener implements Listener {
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        event.getPlayer().sendMessage("欢迎来到服务器！");
+    }
 }
 ```
 
-## 总结
+在主类里注册监听器：
+```java
+getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+```
 
-| 方案 | 优点 | 缺点 |
-|------|------|------|
-| 回调函数 | 简单 | 回调地狱 |
-| Promise | 链式调用 | 仍有回调 |
-| async/await | 同步写法 | 需要 try/catch |
+## 常用 API
 
-建议在现代 JavaScript 开发中优先使用 async/await。
+### 给玩家发消息
+```java
+player.sendMessage(ChatColor.GREEN + "你好！");
+```
+
+### 给玩家物品
+```java
+ItemStack item = new ItemStack(Material.DIAMOND_SWORD);
+player.getInventory().addItem(item);
+```
+
+### 执行命令
+```java
+Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() + " diamond 1");
+```
+
+## 打包和测试
+
+用 Maven 或 Gradle 打包成 `.jar` 文件，放到服务器的 `plugins` 文件夹，重启服务器即可。
+
+## 下一步
+
+- 学习更多 Spigot API
+- 研究 SQLite/MySQL 数据存储
+- 了解 BungeeCord 跨服通信
+- 开始写你自己的插件！
+
+---
+
+*写插件不难，难的是写出稳定、高性能的插件。多写多练，慢慢来。*

@@ -2,22 +2,40 @@
 import { CONFIG } from './config.js';
 
 const { owner, repo, branch, postsDir } = CONFIG.github;
-const TOKEN = CONFIG.github.token || '';
+const CACHE_KEY = 'blog_posts_cache';
+const CACHE_TTL = 10 * 60 * 1000;
 
-function headers() {
-  const h = { Accept: 'application/vnd.github.v3+json' };
-  if (TOKEN) h.Authorization = `token ${TOKEN}`;
-  return h;
+function getCached(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const { data, ts } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL) return null;
+    return data;
+  } catch { return null; }
+}
+
+function setCache(key, data) {
+  localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() }));
 }
 
 /**
  * Fetch posts list from GitHub
  */
 export async function fetchPosts() {
+  const cached = getCached(CACHE_KEY);
+  if (cached) return cached;
+
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${postsDir}?ref=${branch}`;
   
   try {
-    const response = await fetch(url, { headers: headers() });
+    const response = await fetch(url);
+    
+    if (response.status === 403) {
+      const cached2 = getCached(CACHE_KEY + '_fallback');
+      if (cached2) return cached2;
+      throw new Error('GitHub API rate limit exceeded. Try again later.');
+    }
     
     if (!response.ok) {
       throw new Error(`GitHub API error: ${response.status}`);
@@ -33,6 +51,8 @@ export async function fetchPosts() {
         return new Date(dateB) - new Date(dateA);
       });
     
+    setCache(CACHE_KEY, mdFiles);
+    setCache(CACHE_KEY + '_fallback', mdFiles);
     return mdFiles;
   } catch (error) {
     console.error('Failed to fetch posts:', error);
@@ -64,7 +84,7 @@ export async function fetchPostContent(file) {
 export async function fetchCommitAuthor(filename) {
   const url = `https://api.github.com/repos/${owner}/${repo}/commits?path=${postsDir}/${filename}&per_page=1`;
   try {
-    const response = await fetch(url, { headers: headers() });
+    const response = await fetch(url);
     if (!response.ok) return null;
     const data = await response.json();
     if (data.length > 0) {

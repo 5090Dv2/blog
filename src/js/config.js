@@ -1,37 +1,40 @@
-import { initTheme, toggleTheme } from './theme.js';
-import { initNavigation, showPage } from './navigation.js';
-import { initRenderer, renderArchives, renderCategories } from './renderer.js';
-import { initSearch } from './search.js';
+// ========== Blog Configuration ==========
+export const CONFIG = {
+  // GitHub Repository
+  github: {
+    owner: '5090Dv2',
+    repo: 'blog',
+    branch: 'main',
+    postsDir: 'posts',
+  },
 
-async function init() {
-  initTheme();
-  initNavigation();
-  initSearch();
+  // Blog Info
+  blog: {
+    title: '5090Dv2 的博客',
+    subtitle: '分享代码与思考',
+    description: '5090Dv2的技术博客',
+    author: '5090Dv2',
+  },
 
-  const themeBtn = document.getElementById('themeBtn');
-  themeBtn?.addEventListener('click', toggleTheme);
+  // Social Links
+  social: {
+    github: 'https://github.com/5090Dv2',
+    email: 'https://cnboxing.net',
+    twitter: '',
+    juejin: '',
+    zhihu: '',
+  },
 
-  await initRenderer();
+  // Pagination
+  pagination: {
+    postsPerPage: 10,
+  },
 
-  window.showPage = function(page) {
-    showPage(page);
-    if (page === 'archives') renderArchives();
-    if (page === 'categories') renderCategories();
-  };
+  // Search
+  search: {
+    enabled: true,
+    placeholder: '搜索文章...',
+  },
+};
 
-  const hash = window.location.hash.slice(1);
-  if (hash && ['home', 'archives', 'categories', 'about'].includes(hash)) {
-    showPage(hash);
-    if (hash === 'archives') renderArchives();
-    if (hash === 'categories') renderCategories();
-  }
-
-  window.addEventListener('hashchange', () => {
-    const h = window.location.hash.slice(1) || 'home';
-    showPage(h);
-    if (h === 'archives') renderArchives();
-    if (h === 'categories') renderCategories();
-  });
-}
-
-document.addEventListener('DOMContentLoaded', init);
+export default CONFIG;

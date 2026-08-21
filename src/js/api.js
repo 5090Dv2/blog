@@ -2,6 +2,13 @@
 import { CONFIG } from './config.js';
 
 const { owner, repo, branch, postsDir } = CONFIG.github;
+const TOKEN = CONFIG.github.token || '';
+
+function headers() {
+  const h = { Accept: 'application/vnd.github.v3+json' };
+  if (TOKEN) h.Authorization = `token ${TOKEN}`;
+  return h;
+}
 
 /**
  * Fetch posts list from GitHub
@@ -10,7 +17,7 @@ export async function fetchPosts() {
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${postsDir}?ref=${branch}`;
   
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: headers() });
     
     if (!response.ok) {
       throw new Error(`GitHub API error: ${response.status}`);
@@ -18,7 +25,6 @@ export async function fetchPosts() {
     
     const data = await response.json();
     
-    // Filter markdown files and sort by date
     const mdFiles = data
       .filter(file => file.name.endsWith('.md'))
       .sort((a, b) => {
@@ -58,7 +64,7 @@ export async function fetchPostContent(file) {
 export async function fetchCommitAuthor(filename) {
   const url = `https://api.github.com/repos/${owner}/${repo}/commits?path=${postsDir}/${filename}&per_page=1`;
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: headers() });
     if (!response.ok) return null;
     const data = await response.json();
     if (data.length > 0) {

@@ -16,8 +16,9 @@
 .about-hero {
   margin-bottom: var(--space-8);
 }
-.about-hero__avatar {
+.about-hero__img {
   width: 100%;
   border-radius: var(--radius-lg);
   display: block;
+  box-shadow: var(--shadow);
 }

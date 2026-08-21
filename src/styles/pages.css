@@ -26,7 +26,7 @@
   left: -30px;
   right: -30px;
   bottom: -30px;
-  background: url('./images/about-avatar.png') center/cover no-repeat;
+  background: url('../images/about-avatar.jpg') center/cover no-repeat;
   transition: transform 0.15s ease-out;
   transform: scale(1.08);
 }

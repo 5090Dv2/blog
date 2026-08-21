@@ -1,0 +1,13 @@
+/* 文章页补充样式（主要布局见 layout.css） */
+
+.article__content { font-family: var(--font-serif); }
+.article__content p,
+.article__content li { font-size: 1.125rem; line-height: 1.85; }
+
+.prose p { margin-bottom: var(--space-5); line-height: 1.8; }
+.prose h2 { font-family: var(--font-serif); font-size: var(--text-2xl); font-weight: 700; margin: var(--space-10) 0 var(--space-4); }
+.prose h3 { font-family: var(--font-serif); font-size: var(--text-xl); font-weight: 600; margin: var(--space-8) 0 var(--space-3); }
+.prose a { text-decoration: underline; text-underline-offset: 2px; }
+.prose ul { padding-left: var(--space-6); margin-bottom: var(--space-5); list-style: disc; }
+.prose ul li { margin-bottom: var(--space-2); }
+.prose strong { font-weight: 700; }

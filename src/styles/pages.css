@@ -1,4 +1,4 @@
-/* 鏂囩珷椤佃ˉ鍏呮牱寮忥紙涓昏甯冨眬瑙?layout.css锛?*/
+/* 文章页补充样式（主要布局见 layout.css） */
 
 .article__content { font-family: var(--font-serif); }
 .article__content p,
@@ -12,7 +12,7 @@
 .prose ul li { margin-bottom: var(--space-2); }
 .prose strong { font-weight: 700; }
 
-/* 鍏充簬椤靛浘鐗?*/
+/* 关于页图片 */
 .about-hero {
   margin-bottom: var(--space-8);
 }

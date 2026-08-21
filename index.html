@@ -139,8 +139,7 @@
           <h1 class="page-head__title">关于</h1>
         </header>
         <div class="about-hero" id="aboutHero">
-          <div class="about-hero__bg"></div>
-          <img class="about-hero__fg" src="./images/about-avatar.png?v=4" alt="5090Dv2">
+          <img class="about-hero__img" src="./images/about-avatar.png?v=5" alt="5090Dv2">
         </div>
         <div class="prose">
           <p>你好，我是<strong>5090Dv2</strong>，一名Vibe coder。我相信技术的价值在于分享，也相信认真书写能让自己想得更清楚。</p>
@@ -204,15 +203,14 @@
   document.addEventListener('DOMContentLoaded', function() {
     var hero = document.getElementById('aboutHero');
     if (!hero) return;
-    var bg = hero.querySelector('.about-hero__bg');
     hero.addEventListener('mousemove', function(e) {
       var rect = hero.getBoundingClientRect();
       var x = (e.clientX - rect.left) / rect.width - 0.5;
       var y = (e.clientY - rect.top) / rect.height - 0.5;
-      bg.style.transform = 'translate(' + (-x * 20) + 'px, ' + (-y * 20) + 'px) scale(1.05)';
+      hero.style.transform = 'perspective(800px) rotateY(' + (x * 8) + 'deg) rotateX(' + (-y * 8) + 'deg) scale(1.02)';
     });
     hero.addEventListener('mouseleave', function() {
-      bg.style.transform = 'translate(0, 0) scale(1.05)';
+      hero.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) scale(1)';
     });
   });
   </script>

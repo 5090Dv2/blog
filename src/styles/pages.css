@@ -14,28 +14,15 @@
 
 /* 关于页图片视差 */
 .about-hero {
-  position: relative;
   margin-bottom: var(--space-8);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
-  perspective: 800px;
-  cursor: default;
+  transition: transform 0.3s ease-out;
+  transform-style: preserve-3d;
 }
-.about-hero__bg {
-  position: absolute;
-  top: -20px;
-  left: -20px;
-  right: -20px;
-  bottom: -20px;
-  background: url('https://raw.githubusercontent.com/5090Dv2/blog/main/images/about-avatar.png') center/cover no-repeat;
-  transition: transform 0.15s ease-out;
-  transform-origin: center center;
-}
-.about-hero__fg {
-  position: relative;
+.about-hero__img {
   width: 100%;
   display: block;
-  z-index: 1;
-  pointer-events: none;
+  transition: transform 0.3s ease-out;
 }

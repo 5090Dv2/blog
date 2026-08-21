@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it';
-import { fetchPosts, fetchPostContent } from './api.js';
+import { fetchPosts, fetchPostContent, fetchCommitAuthor } from './api.js';
 import { parseFrontmatter, generateTitle, formatDate, formatDateShort, getExcerpt, getReadingTime, extractTags, groupByYear, groupByCategory, extractAllTags } from './utils.js';
 import { showPage } from './navigation.js';
 import { CONFIG } from './config.js';
@@ -19,6 +19,8 @@ async function loadPosts() {
       allPosts.map(async (file, index) => {
         const content = await fetchPostContent(file);
         const { frontmatter, content: markdownContent } = parseFrontmatter(content);
+        const commitAuthor = await fetchCommitAuthor(file.name);
+        const author = frontmatter.author || commitAuthor?.name || CONFIG.blog.author;
         return {
           index, file, frontmatter, content: markdownContent,
           title: frontmatter.title || generateTitle(file.name),
@@ -27,6 +29,8 @@ async function loadPosts() {
           category: frontmatter.category || '未分类',
           readingTime: getReadingTime(markdownContent),
           excerpt: frontmatter.excerpt || getExcerpt(markdownContent),
+          author,
+          commitAuthor,
         };
       })
     );
@@ -49,7 +53,7 @@ function renderPostList() {
   container.innerHTML = parsedPosts.slice(0, CONFIG.pagination.postsPerPage).map(post => {
     const tagsHtml = post.tags.slice(0, 3).map(tag => '<span class="tag">' + tag + '</span>').join('');
     return '<article class="post-item" onclick="window.showPost(' + post.index + ')">' +
-      '<div class="post-item__meta"><span class="cat">' + post.category + '</span><span>·</span><span>' + (post.date ? formatDate(post.date) : '未知日期') + '</span></div>' +
+      '<div class="post-item__meta"><span class="cat">' + post.category + '</span><span>·</span><span>' + (post.date ? formatDate(post.date) : '未知日期') + '</span><span>·</span><span>' + post.author + '</span></div>' +
       '<h3 class="post-item__title">' + post.title + '</h3>' +
       '<p class="post-item__excerpt">' + post.excerpt + '</p>' +
       '<div class="post-item__foot">' + tagsHtml + '<span>📖 ' + post.readingTime + ' 分钟阅读</span></div>' +
@@ -124,7 +128,7 @@ window.showPost = async function(index) {
   const ds = document.getElementById('postDate');
   if (ds) ds.textContent = post.date ? formatDate(post.date) : '未知日期';
   const as = document.getElementById('postAuthor');
-  if (as) as.textContent = CONFIG.blog.author;
+  if (as) as.textContent = post.author;
   const rs = document.getElementById('postReading');
   if (rs) rs.textContent = '约 ' + post.readingTime + ' 分钟';
   const tc = document.getElementById('postTags');

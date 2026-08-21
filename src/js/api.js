@@ -53,6 +53,29 @@ export async function fetchPostContent(file) {
 }
 
 /**
+ * Fetch commit author for a file
+ */
+export async function fetchCommitAuthor(filename) {
+  const url = `https://api.github.com/repos/${owner}/${repo}/commits?path=${postsDir}/${filename}&per_page=1`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    const data = await response.json();
+    if (data.length > 0) {
+      return {
+        name: data[0].commit.author.name,
+        date: data[0].commit.author.date,
+        avatar: data[0].author?.avatar_url || null,
+      };
+    }
+    return null;
+  } catch (error) {
+    console.error('Failed to fetch commit author:', error);
+    return null;
+  }
+}
+
+/**
  * Fetch multiple posts content
  */
 export async function fetchMultiplePostsContent(files) {

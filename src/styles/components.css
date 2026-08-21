@@ -119,3 +119,20 @@
 }
 .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 .back-to-top:hover { color: var(--color-accent); border-color: var(--color-accent); }
+
+/* 上传按钮 */
+.site-nav__link--upload {
+  background: var(--color-accent);
+  color: #fff !important;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  transition: all var(--transition);
+}
+.site-nav__link--upload::after { display: none; }
+.site-nav__link--upload:hover {
+  background: var(--color-text);
+  color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}

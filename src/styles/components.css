@@ -125,7 +125,7 @@
   display: inline-flex;
   align-items: center;
   padding: 6px 14px;
-  background: var(--color-text);
+  background: #242424;
   color: #fff;
   font-size: 13px;
   font-weight: 500;
@@ -133,7 +133,10 @@
   text-decoration: none;
   transition: all 0.2s;
 }
+[data-theme="dark"] .upload-btn {
+  background: #ededed;
+  color: #242424;
+}
 .upload-btn:hover {
   opacity: 0.85;
-  color: #fff;
 }

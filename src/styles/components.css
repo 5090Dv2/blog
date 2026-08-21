@@ -120,19 +120,20 @@
 .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 .back-to-top:hover { color: var(--color-accent); border-color: var(--color-accent); }
 
-/* 上传按钮 */
-.site-nav__link--upload {
-  background: var(--color-accent);
-  color: #fff !important;
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-full);
-  font-weight: 600;
-  transition: all var(--transition);
-}
-.site-nav__link--upload::after { display: none; }
-.site-nav__link--upload:hover {
+/* 写文章按钮 */
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
   background: var(--color-text);
-  color: #fff !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.upload-btn:hover {
+  opacity: 0.85;
+  color: #fff;
 }

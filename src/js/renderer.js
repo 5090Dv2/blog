@@ -47,7 +47,7 @@ function renderPostList() {
   const container = document.getElementById('postsList');
   if (!container) return;
   if (parsedPosts.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-state__icon">📝</div><h3 class="empty-state__title">暂无文章</h3><p class="empty-state__description">请在 GitHub 仓库的 ' + CONFIG.github.postsDir + ' 目录下上传 Markdown 文件</p></div>';
+    container.innerHTML = '<div class="empty-state"><h3 class="empty-state__title">暂无文章</h3><p class="empty-state__description">请在 GitHub 仓库的 ' + CONFIG.github.postsDir + ' 目录下上传 Markdown 文件</p></div>';
     return;
   }
   container.innerHTML = parsedPosts.slice(0, CONFIG.pagination.postsPerPage).map(post => {
@@ -56,7 +56,7 @@ function renderPostList() {
       '<div class="post-item__meta"><span class="cat">' + post.category + '</span><span>·</span><span>' + (post.date ? formatDate(post.date) : '未知日期') + '</span><span>·</span><span>' + post.author + '</span></div>' +
       '<h3 class="post-item__title">' + post.title + '</h3>' +
       '<p class="post-item__excerpt">' + post.excerpt + '</p>' +
-      '<div class="post-item__foot">' + tagsHtml + '<span>📖 ' + post.readingTime + ' 分钟阅读</span></div>' +
+      '<div class="post-item__foot">' + tagsHtml + '<span>' + post.readingTime + ' 分钟阅读</span></div>' +
       '</article>';
   }).join('');
   container.classList.add('stagger');
@@ -130,7 +130,7 @@ window.showPost = async function(index) {
   const as = document.getElementById('postAuthor');
   if (as) as.textContent = post.author;
   const rs = document.getElementById('postReading');
-  if (rs) rs.textContent = '约 ' + post.readingTime + ' 分钟';
+  if (rs) rs.textContent = post.readingTime + ' 分钟阅读';
   const tc = document.getElementById('postTags');
   if (tc) tc.innerHTML = post.tags.map(tag => '<span class="tag">' + tag + '</span>').join('');
   const pc = document.getElementById('postContent');

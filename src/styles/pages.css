@@ -12,13 +12,27 @@
 .prose ul li { margin-bottom: var(--space-2); }
 .prose strong { font-weight: 700; }
 
-/* 关于页图片 */
+/* 关于页图片视差 */
 .about-hero {
+  position: relative;
   margin-bottom: var(--space-8);
-}
-.about-hero__img {
-  width: 100%;
   border-radius: var(--radius-lg);
-  display: block;
+  overflow: hidden;
   box-shadow: var(--shadow);
+  perspective: 800px;
+  cursor: default;
+}
+.about-hero__bg {
+  position: absolute;
+  inset: -20px;
+  background: url('../../images/about-avatar.png') center/cover no-repeat;
+  transition: transform 0.15s ease-out;
+  transform-origin: center center;
+}
+.about-hero__fg {
+  position: relative;
+  width: 100%;
+  display: block;
+  z-index: 1;
+  pointer-events: none;
 }

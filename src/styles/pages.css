@@ -24,8 +24,11 @@
 }
 .about-hero__bg {
   position: absolute;
-  inset: -20px;
-  background: url('../../images/about-avatar.png') center/cover no-repeat;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: url('/blog/images/about-avatar.png') center/cover no-repeat;
   transition: transform 0.15s ease-out;
   transform-origin: center center;
 }

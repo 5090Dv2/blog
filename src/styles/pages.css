@@ -12,16 +12,12 @@
 .prose ul li { margin-bottom: var(--space-2); }
 .prose strong { font-weight: 700; }
 
-/* 关于页头像 */
+/* 关于页图片 */
 .about-hero {
-  display: flex;
-  justify-content: center;
   margin-bottom: var(--space-8);
 }
 .about-hero__avatar {
   width: 100%;
-  max-width: 480px;
   border-radius: var(--radius-lg);
-  object-fit: cover;
-  box-shadow: var(--shadow);
+  display: block;
 }

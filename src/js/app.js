@@ -3,15 +3,6 @@ import { initNavigation, showPage } from './navigation.js';
 import { initRenderer, renderArchives, renderCategories } from './renderer.js';
 import { initSearch } from './search.js';
 
-import '../styles/variables.css';
-import '../styles/base.css';
-import '../styles/components.css';
-import '../styles/layout.css';
-import '../styles/pages.css';
-import '../styles/markdown.css';
-import '../styles/animations.css';
-import '../styles/responsive.css';
-
 async function init() {
   initTheme();
   initNavigation();

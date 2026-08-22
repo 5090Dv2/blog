@@ -81,7 +81,7 @@ friction = 2.0 - knockbackReduction
 
 以下工具集成了上述四种调试方法，支持自动保存、历史记录、YAML 导入导出等功能：
 
-<iframe src="./tools/kbm/index.html" style="width:100%; height:700px; border:1px solid var(--border); border-radius:var(--radius-lg);"></iframe>
+<a href="./tools/kbm/index.html" target="_blank" style="display:inline-block; padding:12px 24px; background:var(--color-accent); color:#fff; border-radius:var(--radius); text-decoration:none; font-weight:600;">打开 KBM 调试工具 →</a>
 
 > 工具由 dw1e 编写，GitHub 仓库：[KnockbackManager](https://github.com/dw1e/KnockbackManager)
 

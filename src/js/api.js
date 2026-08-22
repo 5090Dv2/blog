@@ -2,33 +2,77 @@
 import { CONFIG } from './config.js';
 
 const { owner, repo, branch } = CONFIG.github;
+const CACHE_KEY = 'blog_posts_cache';
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function getCached(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const { data, ts } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL) return null;
+    return data;
+  } catch { return null; }
+}
+
+function setCache(key, data) {
+  localStorage.setItem(key, JSON.stringify({ data, ts: Date.now() }));
+}
 
 /**
- * Fetch posts list from static JSON (no API rate limit)
+ * Fetch posts list - API first, static fallback
  */
 export async function fetchPosts() {
+  const cached = getCached(CACHE_KEY);
+  if (cached) return cached;
+
+  // Try GitHub API
+  try {
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/posts?ref=${branch}`;
+    const response = await fetch(url);
+    if (response.ok) {
+      const data = await response.json();
+      const mdFiles = data
+        .filter(file => file.name.endsWith('.md'))
+        .sort((a, b) => {
+          const dateA = a.commit?.committer?.date || 0;
+          const dateB = b.commit?.committer?.date || 0;
+          return new Date(dateB) - new Date(dateA);
+        });
+      setCache(CACHE_KEY, mdFiles);
+      return mdFiles;
+    }
+  } catch {}
+
+  // Fallback to static posts.json
   try {
     const response = await fetch('./posts.json');
-    if (!response.ok) throw new Error('Failed to load posts.json');
-    return await response.json();
-  } catch (error) {
-    console.error('Failed to fetch posts:', error);
-    throw error;
-  }
+    if (response.ok) {
+      const data = await response.json();
+      setCache(CACHE_KEY, data);
+      return data;
+    }
+  } catch {}
+
+  throw new Error('Failed to fetch posts');
 }
 
 /**
  * Fetch single post content
  */
 export async function fetchPostContent(file) {
-  try {
-    const response = await fetch(file.download_url);
-    if (!response.ok) throw new Error('Failed to fetch file content');
-    return await response.text();
-  } catch (error) {
-    console.error('Failed to fetch post content:', error);
-    throw error;
+  const tryUrls = [
+    file.download_url,
+    `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${file.path}`
+  ];
+  
+  for (const url of tryUrls) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) return await response.text();
+    } catch {}
   }
+  throw new Error('Failed to fetch post content');
 }
 
 /**
@@ -47,10 +91,8 @@ export async function fetchCommitAuthor(filename) {
         avatar: data[0].author?.avatar_url || null,
       };
     }
-    return null;
-  } catch {
-    return null;
-  }
+  } catch {}
+  return null;
 }
 
 export async function fetchMultiplePostsContent(files) {

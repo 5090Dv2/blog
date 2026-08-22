@@ -1,12 +1,7 @@
 [
-    {
-        "download_url":  "https://raw.githubusercontent.com/5090Dv2/blog/main/posts/introducing-this-blog.md",
-        "path":  "posts/introducing-this-blog.md",
-        "name":  "introducing-this-blog.md"
-    },
-    {
-        "download_url":  "https://raw.githubusercontent.com/5090Dv2/blog/main/posts/knockback-physics.md",
-        "path":  "posts/knockback-physics.md",
-        "name":  "knockback-physics.md"
-    }
+  {
+    "name": "introducing-this-blog.md",
+    "path": "posts/introducing-this-blog.md",
+    "download_url": "https://raw.githubusercontent.com/5090Dv2/blog/main/posts/introducing-this-blog.md"
+  }
 ]

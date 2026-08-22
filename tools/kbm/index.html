@@ -367,7 +367,11 @@
                     <p style="color:var(--text2);"><b>💾 自动保存</b>：所有修改自动保存在浏览器中，刷新页面不会丢失。</p>
                 </div>
                 <div class="section">
-                    <h2 style="color:var(--accent); font-weight:normal; border-bottom:1px solid var(--border); padding-bottom:4px;">❓ 常见问题</h2>
+                    <h2 style="color:var(--accent); font-weight:normal; border-bottom:1px solid var(--border); padding-bottom:4px;">插件信息</h2>
+                    <p style="color:var(--text2);">KnockbackManager 由 墨渊 编写，基于 ProtocolLib。</p>
+                </div>
+                <div class="section">
+                    <h2 style="color:var(--accent); font-weight:normal; border-bottom:1px solid var(--border); padding-bottom:4px;">常见问题</h2>
                     <p style="color:var(--text2);"><b>Q: 模块怎么切换？</b><br>A: 点击左缘「☰ 控制面板」呼出侧边栏 → 「📌 模块切换」选择四个模块之一，主界面立即切换，不用另开页面。</p>
                     <p style="color:var(--text2);"><b>Q: 撤销后为什么没反应？</b><br>A: 撤销/恢复均有右上角 Toast 提示，若提示“已是该状态”说明当前与目标状态一致。</p>
                     <p style="color:var(--text2);"><b>Q: 导入多个文件如何分配？</b><br>A: 根据文件名自动识别，包含 "A"/"下限"/"low" 等→方案A，包含 "B"/"上限"/"high" 等→方案B，无法识别时弹窗让您选择。</p>
@@ -454,5 +458,25 @@
 <div id="toasts"></div>
 
 <script src="app.js"></script>
+<script>
+(function() {
+  function syncTheme() {
+    var parentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', parentTheme);
+  }
+  syncTheme();
+  var observer = new MutationObserver(syncTheme);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (window.parent !== window) {
+    try {
+      var parentDoc = window.parent.document;
+      var pt = parentDoc.documentElement.getAttribute('data-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', pt);
+      var po = new MutationObserver(syncTheme);
+      po.observe(parentDoc.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    } catch(e) {}
+  }
+})();
+</script>
 </body>
 </html>
